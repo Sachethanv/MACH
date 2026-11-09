@@ -1,0 +1,27 @@
+<svg viewbox="0 0 760 158" width="100%" role="img" aria-label="Seven day plan">
+<style>.d{font-size:9.4px;font-weight:700}.dd{font-size:8.3px;fill:#52514e}</style>
+<g>
+<rect x="0" y="0" width="104" height="22" rx="4" fill="#2a78d6"></rect><text x="52" y="15" class="d" text-anchor="middle" fill="#fff">Fri 6 Nov</text>
+<rect x="109" y="0" width="104" height="22" rx="4" fill="#2a78d6"></rect><text x="161" y="15" class="d" text-anchor="middle" fill="#fff">Sat 7</text>
+<rect x="218" y="0" width="104" height="22" rx="4" fill="#2a78d6"></rect><text x="270" y="15" class="d" text-anchor="middle" fill="#fff">Sun 8</text>
+<rect x="327" y="0" width="104" height="22" rx="4" fill="#2a78d6"></rect><text x="379" y="15" class="d" text-anchor="middle" fill="#fff">Mon 9</text>
+<rect x="436" y="0" width="104" height="22" rx="4" fill="#2a78d6"></rect><text x="488" y="15" class="d" text-anchor="middle" fill="#fff">Tue 10</text>
+<rect x="545" y="0" width="104" height="22" rx="4" fill="#2a78d6"></rect><text x="597" y="15" class="d" text-anchor="middle" fill="#fff">Wed 11</text>
+<rect x="654" y="0" width="106" height="22" rx="4" fill="#eb6834"></rect><text x="707" y="15" class="d" text-anchor="middle" fill="#fff">Thu 12 · DUE</text>
+</g>
+<g class="dd">
+<text x="4" y="40">Corpus: 40+ docs</text><text x="4" y="52">with revisions, ECNs,</text><text x="4" y="64">planted traps</text><text x="4" y="76">Registry schema</text>
+<text x="113" y="40">250-question gold</text><text x="113" y="52">set drafted</text><text x="113" y="64">BM25 + text-RAG</text><text x="113" y="76">baselines run</text>
+<text x="222" y="40">Page-image lane,</text><text x="222" y="52">fusion, Revision</text><text x="222" y="64">Guard, context lock</text>
+<text x="331" y="40">Number lock,</text><text x="331" y="52">verifier, hazard</text><text x="331" y="64">gate, partial</text><text x="331" y="76">answers</text>
+<text x="440" y="40">Expert inbox,</text><text x="440" y="52">drafting + approval</text><text x="440" y="64">flow, audit log</text>
+<text x="549" y="40">Full evaluation run,</text><text x="549" y="52">ablations, results</text><text x="549" y="64">table, screenshots,</text><text x="549" y="76">demo video</text>
+<text x="658" y="40">Finish 12–15 slides,</text><text x="658" y="52">rehearse 7 min twice,</text><text x="658" y="64">submit by evening</text><text x="658" y="76">(not 11:58 PM)</text>
+</g>
+<rect x="0" y="96" width="213" height="18" rx="4" fill="#eaf2fc"></rect><text x="8" y="109" class="dd">Gate: baselines answer the gold set</text>
+<rect x="218" y="96" width="213" height="18" rx="4" fill="#eaf2fc"></rect><text x="226" y="109" class="dd">Gate: end-to-end answer with citation in UI</text>
+<rect x="436" y="96" width="213" height="18" rx="4" fill="#eaf2fc"></rect><text x="444" y="109" class="dd">Gate: numbers for the results slide</text>
+<rect x="654" y="96" width="106" height="18" rx="4" fill="#fdeee7"></rect><text x="662" y="109" class="dd">Gate: PPT submitted</text>
+<text x="0" y="138" class="dd">If behind schedule, cut in this order: query by photo, &quot;what changed?&quot; answers, STE checker, drafting UI polish. Never cut Revision Guard, the verifier or the baselines.</text>
+<text x="0" y="152" class="dd">Suggested split (3–4 people): data and evaluation · retrieval and registry · LLM checks and agents · UI, governance and PPT.</text>
+</svg>

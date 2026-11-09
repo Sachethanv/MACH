@@ -1,0 +1,24 @@
+# M.A.C.H. settings (placeholders; never hard-code these in code)
+plant_timezone: Asia/Kolkata
+latency_budget_s: 15
+retrieval:
+  top_k_per_lane: 20
+  rerank_top_n: 20
+  max_page_images_to_generator: 4
+  fusion_weights: {exact_id: 1.0, bm25: 1.0, dense: 1.0, visual: 1.0}   # fit on dev split
+  crossref_hops: 1
+router:
+  max_rounds: 2
+generator:
+  backend: vllm            # vllm | gemini | ollama
+  model: Qwen/Qwen2.5-VL-7B-Instruct-AWQ
+  base_url: http://localhost:8000/v1
+  temperature: 0.0
+  max_tokens: 600
+embeddings:
+  dense: BAAI/bge-m3
+  visual: vidore/colqwen2.5-v0.2
+  reranker: BAAI/bge-reranker-v2-m3
+stores:
+  postgres_url: ${POSTGRES_URL}
+  qdrant_url: ${QDRANT_URL}

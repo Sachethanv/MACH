@@ -1,0 +1,61 @@
+<svg viewbox="0 0 760 452" width="100%" role="img" aria-label="M.A.C.H. architecture">
+<defs><marker id="a" viewbox="0 0 10 10" refx="9" refy="5" markerwidth="6" markerheight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#52514e"></path></marker></defs>
+<style>.lane{font-size:9px;font-weight:700;fill:#8a8984;letter-spacing:.8px}.bt{font-size:9.6px;font-weight:700;fill:#0b0b0b}.bs{font-size:8.4px;fill:#52514e}.ln{stroke:#52514e;stroke-width:1.2;fill:none}</style>
+<!-- Lane 1 -->
+<text class="lane" x="0" y="12">1 · INGEST (OFFLINE)</text>
+<rect x="0" y="20" width="175" height="66" rx="6" fill="#eaf2fc" stroke="#2a78d6"></rect>
+<text x="10" y="38" class="bt">Plant documents</text><text x="10" y="52" class="bs">SOPs, WIs, ECNs, deviations,</text><text x="10" y="64" class="bs">RCAs, quality alerts, drawings,</text><text x="10" y="76" class="bs">annotated photos</text>
+<rect x="195" y="20" width="175" height="66" rx="6" fill="#eaf2fc" stroke="#2a78d6"></rect>
+<text x="205" y="38" class="bt">Layout parser</text><text x="205" y="52" class="bs">Text, tables, figures, boxes;</text><text x="205" y="64" class="bs">stable step/figure/table IDs;</text><text x="205" y="76" class="bs">cross-refs; injection stripping</text>
+<rect x="390" y="20" width="175" height="66" rx="6" fill="#fdeee7" stroke="#eb6834" stroke-width="1.6"></rect>
+<text x="400" y="38" class="bt">Revision registry (N)</text><text x="400" y="52" class="bs">Status, effective from/to, scope,</text><text x="400" y="64" class="bs">supersedes, deviation overlays,</text><text x="400" y="76" class="bs">hazard tag per step, access role</text>
+<rect x="585" y="20" width="175" height="66" rx="6" fill="#eaf2fc" stroke="#2a78d6"></rect>
+<text x="595" y="38" class="bt">Four search indexes</text><text x="595" y="52" class="bs">BM25 keywords · dense text ·</text><text x="595" y="64" class="bs">page images (ColQwen2) ·</text><text x="595" y="76" class="bs">exact IDs (part, tool, SOP no.)</text>
+<path class="ln" d="M175,53 H193" marker-end="url(#a)"></path><path class="ln" d="M370,53 H388" marker-end="url(#a)"></path><path class="ln" d="M565,53 H583" marker-end="url(#a)"></path>
+<path class="ln" d="M672,86 V104 H312 V122" marker-end="url(#a)"></path><path class="ln" d="M477,86 V104"></path>
+<!-- Lane 2 -->
+<text class="lane" x="0" y="118">2 · ANSWER (ONLINE)</text>
+<g>
+<rect x="0" y="124" width="112" height="80" rx="6" fill="#f4f4f2" stroke="#52514e"></rect>
+<text x="8" y="141" class="bt">Question</text><text x="8" y="155" class="bs">Text, photo or voice</text><text x="8" y="167" class="bs">+ context lock (N):</text><text x="8" y="179" class="bs">role, station, model,</text><text x="8" y="191" class="bs">serial, shift</text>
+<rect x="128" y="124" width="112" height="80" rx="6" fill="#f4f4f2" stroke="#52514e"></rect>
+<text x="136" y="141" class="bt">Router</text><text x="136" y="155" class="bs">Direct lookup (cell)</text><text x="136" y="167" class="bs">Single retrieval</text><text x="136" y="179" class="bs">Multi-hop (max 3 loops)</text><text x="136" y="191" class="bs">Escalate immediately</text>
+<rect x="256" y="124" width="112" height="80" rx="6" fill="#fdeee7" stroke="#eb6834" stroke-width="1.6"></rect>
+<text x="264" y="141" class="bt">Retrieve</text><text x="264" y="155" class="bs">Role filter first</text><text x="264" y="167" class="bs">Revision Guard (N):</text><text x="264" y="179" class="bs">effective + in scope</text><text x="264" y="191" class="bs">Fuse 4 lanes, rerank</text>
+<rect x="384" y="124" width="112" height="80" rx="6" fill="#f4f4f2" stroke="#52514e"></rect>
+<text x="392" y="141" class="bt">Evidence grader</text><text x="392" y="155" class="bs">Relevant → answer</text><text x="392" y="167" class="bs">Ambiguous → search</text><text x="392" y="179" class="bs">again (max 2)</text><text x="392" y="191" class="bs">Conflict → flag</text>
+<rect x="512" y="124" width="112" height="80" rx="6" fill="#fdeee7" stroke="#eb6834" stroke-width="1.6"></rect>
+<text x="520" y="141" class="bt">Generator</text><text x="520" y="155" class="bs">Structured JSON steps</text><text x="520" y="167" class="bs">Warnings first</text><text x="520" y="179" class="bs">Number lock (N):</text><text x="520" y="191" class="bs">values from source cells</text>
+<rect x="640" y="124" width="120" height="80" rx="6" fill="#fdeee7" stroke="#eb6834" stroke-width="1.6"></rect>
+<text x="648" y="141" class="bt">Verifier + risk gate</text><text x="648" y="155" class="bs">Citation entailment</text><text x="648" y="167" class="bs">One revision per answer</text><text x="648" y="179" class="bs">Safety steps complete</text><text x="648" y="191" class="bs">Hazard-tier threshold</text>
+<path class="ln" d="M112,164 H126" marker-end="url(#a)"></path><path class="ln" d="M240,164 H254" marker-end="url(#a)"></path><path class="ln" d="M368,164 H382" marker-end="url(#a)"></path><path class="ln" d="M496,164 H510" marker-end="url(#a)"></path><path class="ln" d="M624,164 H638" marker-end="url(#a)"></path>
+</g>
+<!-- outcomes -->
+<path class="ln" d="M700,204 V216 H120 V230" marker-end="url(#a)"></path><path class="ln" d="M380,216 V230" marker-end="url(#a)"></path><path class="ln" d="M640,216 V230" marker-end="url(#a)"></path>
+<rect x="0" y="232" width="240" height="42" rx="6" fill="#f8e0e0" stroke="#d03b3b"></rect>
+<text x="10" y="249" class="bt">Abstain + escalate</text><text x="10" y="263" class="bs">&quot;Not enough evidence&quot;; stop-and-hold if hazardous</text>
+<rect x="260" y="232" width="240" height="42" rx="6" fill="#fbe6dc" stroke="#ec835a"></rect>
+<text x="270" y="249" class="bt">Partial answer + escalate rest (N)</text><text x="270" y="263" class="bs">Certified steps shown; uncertain steps to expert</text>
+<rect x="520" y="232" width="240" height="42" rx="6" fill="#e3f4ec" stroke="#1baf7a"></rect>
+<text x="530" y="249" class="bt">Answer with step-level citations</text><text x="530" y="263" class="bs">Rev, page, step, figure; &quot;superseded by&quot; notes</text>
+<!-- Lane 3 -->
+<text class="lane" x="345" y="300">3 · GOVERNANCE</text>
+<path class="ln" d="M75,274 V306" marker-end="url(#a)"></path><path class="ln" d="M330,274 V290 H110 V306" marker-end="url(#a)"></path>
+<rect x="0" y="308" width="150" height="70" rx="6" fill="#f4f4f2" stroke="#52514e"></rect>
+<text x="8" y="325" class="bt">Expert inbox</text><text x="8" y="339" class="bs">Top 2–3 candidate answers</text><text x="8" y="351" class="bs">with evidence (not a blank</text><text x="8" y="363" class="bs">ticket); timeout → hold</text>
+<rect x="165" y="308" width="160" height="70" rx="6" fill="#fdeee7" stroke="#eb6834" stroke-width="1.6"></rect>
+<text x="173" y="325" class="bt">Expert notes (N)</text><text x="173" y="339" class="bs">Provenance, expiry date,</text><text x="173" y="351" class="bs">SOP-conflict check; advisory</text><text x="173" y="363" class="bs">only until change control</text>
+<path class="ln" d="M150,343 H163" marker-end="url(#a)"></path>
+<rect x="345" y="308" width="85" height="70" rx="6" fill="#f4f4f2" stroke="#52514e"></rect>
+<text x="353" y="325" class="bt">Trigger</text><text x="353" y="339" class="bs">RCA, ECN,</text><text x="353" y="351" class="bs">or repeated</text><text x="353" y="363" class="bs">escalations</text>
+<rect x="444" y="308" width="95" height="70" rx="6" fill="#f4f4f2" stroke="#52514e"></rect>
+<text x="452" y="325" class="bt">Drafter agent</text><text x="452" y="339" class="bs">Template + STE</text><text x="452" y="351" class="bs">rules; cites RCA</text><text x="452" y="363" class="bs">and current SOP</text>
+<rect x="553" y="308" width="95" height="70" rx="6" fill="#f4f4f2" stroke="#52514e"></rect>
+<text x="561" y="325" class="bt">Compliance</text><text x="561" y="339" class="bs">Checks all active</text><text x="561" y="351" class="bs">SOPs, fields,</text><text x="561" y="363" class="bs">safety steps</text>
+<rect x="662" y="308" width="98" height="70" rx="6" fill="#fdeee7" stroke="#eb6834" stroke-width="1.6"></rect>
+<text x="670" y="325" class="bt">Human approval</text><text x="670" y="339" class="bs">Diff view of every</text><text x="670" y="351" class="bs">AI change; planted-</text><text x="670" y="363" class="bs">fault audit (N)</text>
+<path class="ln" d="M430,343 H442" marker-end="url(#a)"></path><path class="ln" d="M539,343 H551" marker-end="url(#a)"></path><path class="ln" d="M648,343 H660" marker-end="url(#a)"></path>
+<rect x="0" y="392" width="760" height="28" rx="6" fill="#ffffff" stroke="#b5b4ae" stroke-dasharray="4 3"></rect>
+<text x="10" y="410" class="bs"><tspan font-weight="700" fill="#0b0b0b">Audit log, every stage:</tspan> query, user, context, chunk IDs, revisions, model version, answer, escalation and approval events. Any past answer can be replayed.</text>
+<text x="0" y="440" class="bs">Approved drafts are written back to the revision registry as the new effective revision; the old one is marked superseded automatically. Orange boxes = M.A.C.H. novelty.</text>
+</svg>

@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>M.A.C.H. Project Brief</title>
+<style>
+@page { size: A4; margin: 16mm 15mm 16mm 15mm; }
+:root{
+  --ink:#0b0b0b; --ink2:#52514e; --muted:#8a8984; --rule:#dddcd6; --tint:#f4f4f2;
+  --blue:#2a78d6; --blue-t:#eaf2fc; --orange:#eb6834; --orange-t:#fdeee7; --aqua:#1baf7a;
+  --crit:#d03b3b; --serious:#ec835a; --low:#b5b4ae;
+}
+*{box-sizing:border-box}
+body{font-family:"Inter","Helvetica Neue",Arial,sans-serif;color:var(--ink);font-size:9.6pt;line-height:1.42;margin:0;background:#fff}
+h1{font-size:24pt;margin:0 0 2px;letter-spacing:-.5px}
+h2{font-size:13.5pt;margin:20px 0 6px;padding-top:6px;border-top:2px solid var(--ink);break-after:avoid}
+h3{font-size:10.5pt;margin:12px 0 4px;break-after:avoid}
+p{margin:4px 0 7px}
+.sub{color:var(--ink2);font-size:10.5pt;margin-bottom:10px}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 12px}
+.fact{background:var(--tint);border-radius:6px;padding:8px 10px}
+.fact b{display:block;font-size:12.5pt}
+.fact span{color:var(--ink2);font-size:8.4pt}
+.lead{font-size:10.6pt}
+table{width:100%;border-collapse:collapse;margin:6px 0 10px;font-size:8.5pt}
+th{text-align:left;background:var(--tint);font-weight:600;padding:4px 5px;border-bottom:1px solid var(--rule)}
+td{padding:3px 5px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr{break-inside:avoid}
+.num{text-align:right;white-space:nowrap}
+.tag{display:inline-block;font-size:7.4pt;font-weight:600;padding:0 5px;border-radius:3px;white-space:nowrap}
+.H{background:#f8e0e0;color:#8e1f1f}.M{background:#fbe6dc;color:#8a3b17}.L{background:#ecebe7;color:#52514e}
+.pr{background:var(--blue-t);color:#1c5cab}.ax{background:#ecebe7;color:#52514e}.in{background:#fff4d6;color:#7a5600}
+.new{color:var(--orange);font-weight:700}
+figure{margin:8px 0 12px;break-inside:avoid}
+figcaption{font-size:8.3pt;color:var(--ink2);margin-top:4px}
+.callout{border-left:3px solid var(--orange);background:var(--orange-t);padding:7px 10px;margin:8px 0;border-radius:0 5px 5px 0}
+.callout.b{border-color:var(--blue);background:var(--blue-t)}
+ul,ol{margin:4px 0 8px;padding-left:18px} li{margin:2px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.qa dt{font-weight:600;margin-top:7px;break-after:avoid}
+.qa dd{margin:2px 0 0 0;color:#222}
+.small{font-size:8.2pt;color:var(--ink2)}
+.pb{break-before:page}
+svg text{font-family:"Inter","Helvetica Neue",Arial,sans-serif}
+.refs{font-size:7.9pt}
+.refs li{margin:1px 0}
+</style>
+</head>
+<body>
+
+<h1>M.A.C.H. Project Brief</h1>
+<div class="sub">Multimodal Agentic Copilot for the sHop floor: a trust-first assistant for SOPs and work instructions · TECHgium 10th edition, presentation round · Prepared 5 November 2026 for Sachiv</div>
+
+<div class="facts">
+  <div class="fact"><b>12 Nov, 11:59 PM IST</b><span>PPT deadline, no extensions</span></div>
+  <div class="fact"><b>15 slides max</b><span>Use the LTTS template; rules on slide 13</span></div>
+  <div class="fact"><b>7 + 5 min</b><span>Presentation, then jury Q&amp;A, on Microsoft Teams</span></div>
+  <div class="fact"><b>7 days</b><span>Build a thin working slice, measure it, pitch it</span></div>
+</div>
+
+<p class="lead"><b>The pitch in one line:</b> M.A.C.H. is a shop-floor assistant that answers from the plant's own SOPs, diagrams and tables, cites the exact step it used, refuses or calls an expert when unsure, and never answers from a superseded revision.</p>
+
+<div class="callout"><b>Why it can win.</b> Image-based document search and self-checking RAG are already published at ICLR and NAACL, so on their own they are table stakes. What we found <i>no peer-reviewed work on</i> is the trust layer for safety-critical procedures: step-level revision safety (outdated documents in general are studied, procedures are not), step-level safety-complete citations, hazard-tiered abstention, and AI drafts measured under change control. That layer is M.A.C.H.'s novelty. Every claim below is worded "we found no prior work", not "world first", because IEEE and Elsevier full texts were checked through the OpenAlex index, not read in full.</div>
+
+<h2>1. The problem</h2>
+<p>Operators follow SOPs and work instructions (WIs) that change through revisions, engineering change notices (ECNs) and temporary deviations. Key values (torques, temperatures, sequences) often live in tables and diagrams, not text. Keyword search misses those. Plain chatbots and plain RAG add a new risk: a fluent, confident, wrong answer.</p>
+<ul>
+<li><b>Outdated documents flip answers.</b> One stale document overturns 17–91% of otherwise-correct RAG answers <span class="tag ax">arXiv 2026, not peer-reviewed</span>. Date-based re-ranking recovers only 4.6–10 points; stating explicitly <i>when</i> old evidence stops applying fixes most of it. Peer-reviewed work confirms the harm <span class="tag pr">HoH, ACL 2025</span> and shows version-unaware evaluation misreports recall by up to 25.7 points <span class="tag pr">EMNLP 2026 Industry</span>, but neither covers procedures.</li>
+<li><b>Citations are not proof.</b> Commercial legal RAG tools hallucinate on 17–33% of queries, including citations that don't support the claim <span class="tag pr">J. Empirical Legal Studies 2025</span>. In medicine, 50–90% of LLM answers are not fully supported by their own sources <span class="tag pr">Nature Communications 2025</span>.</li>
+<li><b>Industry has no benchmark.</b> The peer-reviewed manufacturing RAG papers we found evaluate retrieval only <span class="tag pr">Procedia CIRP 2025</span>. Nobody has published a hallucination audit of generative RAG on SOPs.</li>
+<li><b>Auditors care.</b> ISO 9001 §7.5 requires that only the current revision is available at the point of use; an obsolete WI at a station is a common nonconformity. 21 CFR 211.100(b) requires every deviation to be recorded and justified.</li>
+</ul>
+
+<h2>2. What M.A.C.H. delivers</h2>
+<table>
+<tr><th style="width:22%">Challenge deliverable</th><th style="width:44%">How M.A.C.H. meets it</th><th>Novel part <span class="new">(N)</span></th></tr>
+<tr><td>Versioned multimodal corpus with access control</td><td>Revision registry with status, effective dates, scope (line, model, serial range), supersedes links and deviation overlays. Role filter applied before search.</td><td><span class="new">N</span> Step-level deviation overlays with expiry</td></tr>
+<tr><td>Ingest text, tables, images</td><td>Layout parser gives every step, table and figure a stable ID; page images kept for visual search; scanned pages routed to image search.</td><td>Cross-reference links ("see Fig. 3, step 4")</td></tr>
+<tr><td>Multimodal answers with citations and confidence</td><td>Four search lanes fused, then an answer where every step cites doc, revision, page, step and figure ID. Numbers copied from source cells by code.</td><td><span class="new">N</span> Step-level safety-complete citations; number lock; context lock</td></tr>
+<tr><td>Abstention, conflicts, freshness, escalation</td><td>Evidence grader, conflict detector, Revision Guard, hazard-tiered confidence gate, partial answers, expert inbox with candidate answers.</td><td><span class="new">N</span> Revision Guard; hazard-tiered and shift-aware abstention</td></tr>
+<tr><td>Change-controlled WI drafting</td><td>Drafter and Compliance agents produce a draft from an RCA; human approval required; approved draft becomes a new revision and the old one is superseded.</td><td><span class="new">N</span> Planted-fault reviewer test; STE rule check</td></tr>
+<tr><td>Evaluation vs keyword search and text-only RAG</td><td>MACH-Bench (about 250 questions in 8 buckets, built from real FAA Airworthiness Directive supersessions plus scripted counterfactual edits) plus 30 drafting tasks, and eight public benchmarks; paired statistics; ablations.</td><td><span class="new">N</span> First multimodal SOP benchmark with revision traps</td></tr>
+<tr><td>Security and deployment report</td><td>RBAC, audit log with replay, prompt-injection defences, cloud and on-prem paths, keyword-only fallback when the LLM is down.</td><td>Audit replay of any past answer</td></tr>
+</table>
+
+<h2 class="pb">3. System design</h2>
+<p>M.A.C.H. has three parts. Offline ingestion turns documents into searchable, revision-tagged pieces. The online answer path runs every question through a chain of checks before anything reaches the operator. Governance handles experts, change control and the audit trail.</p>
+
+<figure>
+<svg viewBox="0 0 760 452" width="100%" role="img" aria-label="M.A.C.H. architecture">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#52514e"/></marker></defs>
+<style>.lane{font-size:9px;font-weight:700;fill:#8a8984;letter-spacing:.8px}.bt{font-size:9.6px;font-weight:700;fill:#0b0b0b}.bs{font-size:8.4px;fill:#52514e}.ln{stroke:#52514e;stroke-width:1.2;fill:none}</style>
+<!-- Lane 1 -->
+<text class="lane" x="0" y="12">1 · INGEST (OFFLINE)</text>
+<rect x="0" y="20" width="175" height="66" rx="6" fill="#eaf2fc" stroke="#2a78d6"/>
+<text x="10" y="38" class="bt">Plant documents</text><text x="10" y="52" class="bs">SOPs, WIs, ECNs, deviations,</text><text x="10" y="64" class="bs">RCAs, quality alerts, drawings,</text><text x="10" y="76" class="bs">annotated photos</text>
+<rect x="195" y="20" width="175" height="66" rx="6" fill="#eaf2fc" stroke="#2a78d6"/>
+<text x="205" y="38" class="bt">Layout parser</text><text x="205" y="52" class="bs">Text, tables, figures, boxes;</text><text x="205" y="64" class="bs">stable step/figure/table IDs;</text><text x="205" y="76" class="bs">cross-refs; injection stripping</text>
+<rect x="390" y="20" width="175" height="66" rx="6" fill="#fdeee7" stroke="#eb6834" stroke-width="1.6"/>
+<text x="400" y="38" class="bt">Revision registry (N)</text><text x="400" y="52" class="bs">Status, effective from/to, scope,</text><text x="400" y="64" class="bs">supersedes, deviation overlays,</text><text x="400" y="76" class="bs">hazard tag per step, access role</text>
+<rect x="585" y="20" width="175" height="66" rx="6" fill="#eaf2fc" stroke="#2a78d6"/>
+<text x="595" y="38" class="bt">Four search indexes</text><text x="595" y="52" class="bs">BM25 keywords · dense text ·</text><text x="595" y="64" class="bs">page images (ColQwen2) ·</text><text x="595" y="76" class="bs">exact IDs (part, tool, SOP no.)</text>
+<path class="ln" d="M175,53 H193" marker-end="url(#a)"/><path class="ln" d="M370,53 H388" marker-end="url(#a)"/><path class="ln" d="M565,53 H583" marker-end="url(#a)"/>
+<path class="ln" d="M672,86 V104 H312 V122" marker-end="url(#a)"/><path class="ln" d="M477,86 V104"/>
+<!-- Lane 2 -->
+<text class="lane" x="0" y="118">2 · ANSWER (ONLINE)</text>
+<g>
+<rect x="0" y="124" width="112" height="80" rx="6" fill="#f4f4f2" stroke="#52514e"/>
+<text x="8" y="141" class="bt">Question</text><text x="8" y="155" class="bs">Text, photo or voice</text><text x="8" y="167" class="bs">+ context lock (N):</text><text x="8" y="179" class="bs">role, station, model,</text><text x="8" y="191" class="bs">serial, shift</text>
+<rect x="128" y="124" width="112" height="80" rx="6" fill="#f4f4f2" stroke="#52514e"/>
+<text x="136" y="141" class="bt">Router</text><text x="136" y="155" class="bs">Direct lookup (cell)</text><text x="136" y="167" class="bs">Single retrieval</text><text x="136" y="179" class="bs">Multi-hop (max 3 loops)</text><text x="136" y="191" class="bs">Escalate immediately</text>
+<rect x="256" y="124" width="112" height="80" rx="6" fill="#fdeee7" stroke="#eb6834" stroke-width="1.6"/>
+<text x="264" y="141" class="bt">Retrieve</text><text x="264" y="155" class="bs">Role filter first</text><text x="264" y="167" class="bs">Revision Guard (N):</text><text x="264" y="179" class="bs">effective + in scope</text><text x="264" y="191" class="bs">Fuse 4 lanes, rerank</text>
+<rect x="384" y="124" width="112" height="80" rx="6" fill="#f4f4f2" stroke="#52514e"/>
+<text x="392" y="141" class="bt">Evidence grader</text><text x="392" y="155" class="bs">Relevant → answer</text><text x="392" y="167" class="bs">Ambiguous → search</text><text x="392" y="179" class="bs">again (max 2)</text><text x="392" y="191" class="bs">Conflict → flag</text>
+<rect x="512" y="124" width="112" height="80" rx="6" fill="#fdeee7" stroke="#eb6834" stroke-width="1.6"/>
+<text x="520" y="141" class="bt">Generator</text><text x="520" y="155" class="bs">Structured JSON steps</text><text x="520" y="167" class="bs">Warnings first</text><text x="520" y="179" class="bs">Number lock (N):</text><text x="520" y="191" class="bs">values from source cells</text>
+<rect x="640" y="124" width="120" height="80" rx="6" fill="#fdeee7" stroke="#eb6834" stroke-width="1.6"/>
+<text x="648" y="141" class="bt">Verifier + risk gate</text><text x="648" y="155" class="bs">Citation entailment</text><text x="648" y="167" class="bs">One revision per answer</text><text x="648" y="179" class="bs">Safety steps complete</text><text x="648" y="191" class="bs">Hazard-tier threshold</text>
+<path class="ln" d="M112,164 H126" marker-end="url(#a)"/><path class="ln" d="M240,164 H254" marker-end="url(#a)"/><path class="ln" d="M368,164 H382" marker-end="url(#a)"/><path class="ln" d="M496,164 H510" marker-end="url(#a)"/><path class="ln" d="M624,164 H638" marker-end="url(#a)"/>
+</g>
+<!-- outcomes -->
+<path class="ln" d="M700,204 V216 H120 V230" marker-end="url(#a)"/><path class="ln" d="M380,216 V230" marker-end="url(#a)"/><path class="ln" d="M640,216 V230" marker-end="url(#a)"/>
+<rect x="0" y="232" width="240" height="42" rx="6" fill="#f8e0e0" stroke="#d03b3b"/>
+<text x="10" y="249" class="bt">Abstain + escalate</text><text x="10" y="263" class="bs">"Not enough evidence"; stop-and-hold if hazardous</text>
+<rect x="260" y="232" width="240" height="42" rx="6" fill="#fbe6dc" stroke="#ec835a"/>
+<text x="270" y="249" class="bt">Partial answer + escalate rest (N)</text><text x="270" y="263" class="bs">Certified steps shown; uncertain steps to expert</text>
+<rect x="520" y="232" width="240" height="42" rx="6" fill="#e3f4ec" stroke="#1baf7a"/>
+<text x="530" y="249" class="bt">Answer with step-level citations</text><text x="530" y="263" class="bs">Rev, page, step, figure; "superseded by" notes</text>
+<!-- Lane 3 -->
+<text class="lane" x="345" y="300">3 · GOVERNANCE</text>
+<path class="ln" d="M75,274 V306" marker-end="url(#a)"/><path class="ln" d="M330,274 V290 H110 V306" marker-end="url(#a)"/>
+<rect x="0" y="308" width="150" height="70" rx="6" fill="#f4f4f2" stroke="#52514e"/>
+<text x="8" y="325" class="bt">Expert inbox</text><text x="8" y="339" class="bs">Top 2–3 candidate answers</text><text x="8" y="351" class="bs">with evidence (not a blank</text><text x="8" y="363" class="bs">ticket); timeout → hold</text>
+<rect x="165" y="308" width="160" height="70" rx="6" fill="#fdeee7" stroke="#eb6834" stroke-width="1.6"/>
+<text x="173" y="325" class="bt">Expert notes (N)</text><text x="173" y="339" class="bs">Provenance, expiry date,</text><text x="173" y="351" class="bs">SOP-conflict check; advisory</text><text x="173" y="363" class="bs">only until change control</text>
+<path class="ln" d="M150,343 H163" marker-end="url(#a)"/>
+<rect x="345" y="308" width="85" height="70" rx="6" fill="#f4f4f2" stroke="#52514e"/>
+<text x="353" y="325" class="bt">Trigger</text><text x="353" y="339" class="bs">RCA, ECN,</text><text x="353" y="351" class="bs">or repeated</text><text x="353" y="363" class="bs">escalations</text>
+<rect x="444" y="308" width="95" height="70" rx="6" fill="#f4f4f2" stroke="#52514e"/>
+<text x="452" y="325" class="bt">Drafter agent</text><text x="452" y="339" class="bs">Template + STE</text><text x="452" y="351" class="bs">rules; cites RCA</text><text x="452" y="363" class="bs">and current SOP</text>
+<rect x="553" y="308" width="95" height="70" rx="6" fill="#f4f4f2" stroke="#52514e"/>
+<text x="561" y="325" class="bt">Compliance</text><text x="561" y="339" class="bs">Checks all active</text><text x="561" y="351" class="bs">SOPs, fields,</text><text x="561" y="363" class="bs">safety steps</text>
+<rect x="662" y="308" width="98" height="70" rx="6" fill="#fdeee7" stroke="#eb6834" stroke-width="1.6"/>
+<text x="670" y="325" class="bt">Human approval</text><text x="670" y="339" class="bs">Diff view of every</text><text x="670" y="351" class="bs">AI change; planted-</text><text x="670" y="363" class="bs">fault audit (N)</text>
+<path class="ln" d="M430,343 H442" marker-end="url(#a)"/><path class="ln" d="M539,343 H551" marker-end="url(#a)"/><path class="ln" d="M648,343 H660" marker-end="url(#a)"/>
+<rect x="0" y="392" width="760" height="28" rx="6" fill="#ffffff" stroke="#b5b4ae" stroke-dasharray="4 3"/>
+<text x="10" y="410" class="bs"><tspan font-weight="700" fill="#0b0b0b">Audit log, every stage:</tspan> query, user, context, chunk IDs, revisions, model version, answer, escalation and approval events. Any past answer can be replayed.</text>
+<text x="0" y="440" class="bs">Approved drafts are written back to the revision registry as the new effective revision; the old one is marked superseded automatically. Orange boxes = M.A.C.H. novelty.</text>
+</svg>
+<figcaption><b>Figure 1.</b> M.A.C.H. architecture. Orange boxes mark the components where we found no prior peer-reviewed work.</figcaption>
+</figure>
+
+<h3>The checks every answer passes</h3>
+<ol>
+<li><b>Context lock.</b> Role, station, machine model, serial range and shift are attached to the question, so search can only see documents the user may read and that apply to their machine.</li>
+<li><b>Revision Guard.</b> A hard filter, not a soft re-rank: only chunks whose status is effective, whose date window covers today and whose scope covers the operator's line are searchable. Deviations and ECNs are applied to the specific steps they patch.</li>
+<li><b>Evidence grading.</b> A CRAG-style grader scores what was found. Ambiguous evidence triggers up to two re-searches; irrelevant evidence leads to abstention.</li>
+<li><b>Conflict detection.</b> If two active sources give different values for the same parameter, M.A.C.H. shows both and escalates. A quality alert outranks the SOP until it is resolved.</li>
+<li><b>Number lock.</b> Every torque, temperature, pressure or dimension in the answer is copied by code from the cited table cell, with tolerance and unit. If OCR text and the image reading disagree on a digit, the system abstains.</li>
+<li><b>Citation and safety verification.</b> Each step's citation must entail the step, all citations must come from one revision set and the cited variant must match the machine, and every warning, PPE or lockout/tagout (LOTO) step in the source must appear in the answer.</li>
+<li><b>Hazard-tiered gate.</b> The confidence needed to answer depends on the step's hazard tier (below). Below threshold, the system gives a partial answer or abstains, then escalates.</li>
+</ol>
+
+<table>
+<tr><th>Hazard tier</th><th>Examples</th><th>Target max error on answered steps</th><th>Below threshold</th></tr>
+<tr><td><span class="tag H">Tier 1 · Critical</span></td><td>LOTO, pressure release, lifting, torque on safety fasteners</td><td>≤ 1%</td><td>Abstain, "stop and hold", escalate</td></tr>
+<tr><td><span class="tag M">Tier 2 · Quality</span></td><td>Torque specs, temperatures, inspection criteria</td><td>≤ 5%</td><td>Partial answer, escalate the uncertain steps</td></tr>
+<tr><td><span class="tag L">Tier 3 · General</span></td><td>Tool locations, part descriptions, cosmetic steps</td><td>≤ 10%</td><td>Answer with a "low confidence" label</td></tr>
+</table>
+<p class="small">Thresholds are calibrated on a held-out set with conformal risk control (Mohri &amp; Hashimoto, ICML 2024; C-RAG, ICML 2024), separately per tier. They are re-checked whenever an SOP family gets a new revision, because the statistical guarantee assumes new questions look like the calibration set. The error targets are our design choice, not values from a paper.</p>
+
+<h3>Change control for AI-drafted work instructions</h3>
+<figure>
+<svg viewBox="0 0 760 120" width="100%" role="img" aria-label="Change control state machine">
+<defs><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#52514e"/></marker></defs>
+<style>.s{font-size:9.6px;font-weight:700}.t{font-size:8.3px;fill:#52514e}.l{stroke:#52514e;stroke-width:1.2;fill:none}</style>
+<rect x="0" y="34" width="110" height="44" rx="22" fill="#f4f4f2" stroke="#52514e"/><text x="55" y="53" class="s" text-anchor="middle">AI draft</text><text x="55" y="66" class="t" text-anchor="middle">from RCA/ECN</text>
+<rect x="140" y="34" width="120" height="44" rx="22" fill="#f4f4f2" stroke="#52514e"/><text x="200" y="53" class="s" text-anchor="middle">Compliance check</text><text x="200" y="66" class="t" text-anchor="middle">agent, automatic</text>
+<rect x="290" y="34" width="120" height="44" rx="22" fill="#fdeee7" stroke="#eb6834" stroke-width="1.6"/><text x="350" y="53" class="s" text-anchor="middle">Human review</text><text x="350" y="66" class="t" text-anchor="middle">diff view, signed</text>
+<rect x="440" y="34" width="110" height="44" rx="22" fill="#f4f4f2" stroke="#52514e"/><text x="495" y="53" class="s" text-anchor="middle">Approved</text><text x="495" y="66" class="t" text-anchor="middle">effective date set</text>
+<rect x="580" y="34" width="180" height="44" rx="22" fill="#e3f4ec" stroke="#1baf7a"/><text x="670" y="53" class="s" text-anchor="middle">Effective revision</text><text x="670" y="66" class="t" text-anchor="middle">old revision → superseded</text>
+<path class="l" d="M110,56 H138" marker-end="url(#b)"/><path class="l" d="M260,56 H288" marker-end="url(#b)"/><path class="l" d="M410,56 H438" marker-end="url(#b)"/><path class="l" d="M550,56 H578" marker-end="url(#b)"/>
+<path class="l" d="M200,78 V102 H55 V80" marker-end="url(#b)"/><text x="128" y="114" class="t" text-anchor="middle">fails check → back to draft</text>
+<path class="l" d="M350,78 V102 H75 V80" marker-end="url(#b)" stroke-dasharray="3 2"/><text x="290" y="114" class="t" text-anchor="middle">rejected with comments</text>
+<text x="0" y="16" class="t">SOP family is locked while a draft is open, so two drafts can't collide. Every transition is logged with user and time.</text>
+</svg>
+<figcaption><b>Figure 2.</b> Nothing the AI writes becomes official without a signed human approval. Reviewers are periodically shown drafts with planted faults to measure automation bias.</figcaption>
+</figure>
+
+<h2>4. Novelty: 17 ideas, ranked</h2>
+<p>Ranks 1–7 are the PPT headline set. Ranks 8–17 strengthen the paper and the Q&amp;A. "Effort" is for a 3–4 person team in one week.</p>
+<table>
+<tr><th>#</th><th style="width:22%">Idea</th><th style="width:43%">Gap it fills (evidence)</th><th>Effort</th></tr>
+<tr><td>1</td><td><b>Revision Guard</b>: hard effectivity filter, "superseded by" statements, one-revision-per-answer check</td><td>Stale documents flip 17–91% of answers; VersionRAG 90% vs 58% naive RAG <span class="tag ax">both arXiv</span>. Peer-reviewed: HoH (ACL 2025) on outdated info, Morita et al. (EMNLP 2026 Industry) on evolving policy corpora. None on step-level supersession, ECN overlays or mixed-revision answers.</td><td>Low</td></tr>
+<tr><td>2</td><td><b>Step-level, safety-complete citations</b> with figure and step IDs</td><td>ALCE (EMNLP 2023) scores sentences, not step order or missing safety steps. Visual box citation reaches only 54–68% even fine-tuned (VISA, ACL 2025).</td><td>Low–Med</td></tr>
+<tr><td>3</td><td><b>Hazard-tiered abstention</b> with partial answers</td><td>Conformal guarantees exist (ICML 2024); none found calibrated per hazard class or returning certified step subsets.</td><td>Med</td></tr>
+<tr><td>4</td><td><b>Smart escalation + expert memory</b> with expiry and conflict checks</td><td>Prediction sets help humans (NeurIPS 2024). The one factory loop found has no expiry or SOP-conflict control (Frontiers in AI 2024).</td><td>Med</td></tr>
+<tr><td>5</td><td><b>MACH-Bench</b>: multimodal, with revision traps and unsafe asks</td><td>DesignQA (ASME JCISE) covers multimodal engineering docs; SOPRAG <span class="tag ax">arXiv</span> has an SOP retrieval benchmark; VersionQA is software-only <span class="tag ax">arXiv</span>. None combines WIs, images and revision traps.</td><td>Med</td></tr>
+<tr><td>6</td><td><b>Planted-fault reviewer test</b> for AI drafts</td><td>No study measures change-control outcomes for LLM-drafted instructions; EU AI Act Art. 14 asks for automation-bias awareness.</td><td>Low</td></tr>
+<tr><td>7</td><td><b>Adaptive routing</b> by question complexity</td><td>Adaptive-RAG (NAACL 2024): same F1 as IRCoT at 1.46× vs 3.33× the time.</td><td>Low</td></tr>
+<tr><td>8</td><td><b>Context lock</b>: answers scoped to machine variant</td><td>"Misgrounded" citations defined in legal RAG (JELS 2025); never applied to machine variants.</td><td>Low</td></tr>
+<tr><td>9</td><td><b>Deviation overlays</b> on individual steps</td><td>21 CFR 211.100(b) requires recorded deviations; no RAG work models step-level, time-limited patches.</td><td>Med</td></tr>
+<tr><td>10</td><td><b>"What changed?"</b> answers across revisions, including tables and figures</td><td>Diffing multimodal revisions is listed as open in versioning work.</td><td>Med</td></tr>
+<tr><td>11</td><td><b>Cross-reference following</b> ("see Fig. 3, step 4")</td><td>No benchmark or system found that evaluates it.</td><td>Med</td></tr>
+<tr><td>12</td><td><b>Exact-ID search lane</b> with tuned fusion</td><td>Naive fusion ranks relevant results lower on 8–21% of queries <span class="tag ax">arXiv</span>; no study isolates part numbers.</td><td>Low</td></tr>
+<tr><td>13</td><td><b>Number lock</b> for critical values and units</td><td>LLM judges are near random on expert-level correctness (JudgeBench, ICLR 2025); parameters need exact checks.</td><td>Low</td></tr>
+<tr><td>14</td><td><b>Query by photo</b> of a part or panel</td><td>No paper found <span class="tag in">inference</span>.</td><td>Med</td></tr>
+<tr><td>15</td><td><b>Shift-aware escalation</b></td><td>Factory study: assistant most valuable on night shifts with no expert (Frontiers in AI 2024).</td><td>Low</td></tr>
+<tr><td>16</td><td><b>Recalibrate on every revision</b></td><td>Conformal guarantees break under distribution shift; none found tied to document control.</td><td>Med</td></tr>
+<tr><td>17</td><td><b>Simplified Technical English check</b> on drafts</td><td>Builds on Jonek &amp; Manns (CARV 2025): controlled language raised vocabulary compliance 50%→85% and cut editing ~20→12 min. Our new part is measuring it under change control with planted faults.</td><td>Low</td></tr>
+</table>
+<p class="small">Also worth a slide line <span class="tag in">inference, no paper</span>: hands-free voice queries for gloved hands, and answers in Hindi or the local language while citations stay in the original English SOP.</p>
+
+<figure>
+<svg viewBox="0 0 760 186" width="100%" role="img" aria-label="Published results supporting the design">
+<style>.h{font-size:9.6px;font-weight:700}.k{font-size:8.6px;fill:#52514e}.v{font-size:8.6px;font-weight:600;fill:#0b0b0b}.g{stroke:#e6e5e0}</style>
+<!-- panel 1 -->
+<text x="0" y="12" class="h">Page-image search wins on visual docs</text><text x="0" y="25" class="k">ViDoRe, nDCG@5 (ColPali, ICLR 2025)</text>
+<g transform="translate(0,36)">
+<text x="0" y="14" class="k">OCR + BM25</text><rect x="92" y="4" width="98" height="14" rx="2" fill="#86b6ef"/><text x="194" y="15" class="v">65.5</text>
+<text x="0" y="38" class="k">Captions + BGE-M3</text><rect x="92" y="28" width="101" height="14" rx="2" fill="#86b6ef"/><text x="197" y="39" class="v">67.0</text>
+<text x="0" y="62" class="k">ColPali (images)</text><rect x="92" y="52" width="122" height="14" rx="2" fill="#1c5cab"/><text x="218" y="63" class="v">81.3</text>
+<line x1="92" y1="0" x2="92" y2="72" stroke="#b5b4ae"/>
+</g>
+<text x="0" y="134" class="k">Scale 0–100 (bar = value × 1.5 px)</text>
+<!-- panel 2 -->
+<text x="262" y="12" class="h">Hybrid + rerank beats either alone</text><text x="262" y="25" class="k">Text-and-table docs, Recall@5 (arXiv 2026)</text>
+<g transform="translate(262,36)">
+<text x="0" y="14" class="k">Dense only</text><rect x="92" y="4" width="88" height="14" rx="2" fill="#86b6ef"/><text x="184" y="15" class="v">0.587</text>
+<text x="0" y="38" class="k">BM25 only</text><rect x="92" y="28" width="97" height="14" rx="2" fill="#86b6ef"/><text x="193" y="39" class="v">0.644</text>
+<text x="0" y="62" class="k">Hybrid (RRF)</text><rect x="92" y="52" width="104" height="14" rx="2" fill="#86b6ef"/><text x="200" y="63" class="v">0.695</text>
+<text x="0" y="86" class="k">Hybrid + rerank</text><rect x="92" y="76" width="122" height="14" rx="2" fill="#1c5cab"/><text x="218" y="87" class="v">0.816</text>
+<line x1="92" y1="0" x2="92" y2="96" stroke="#b5b4ae"/>
+</g>
+<text x="262" y="146" class="k">Scale 0–1 (bar = value × 150 px)</text>
+<!-- panel 3 -->
+<text x="524" y="12" class="h">Version-aware search fixes revisions</text><text x="524" y="25" class="k">Version QA accuracy, % (VersionRAG, arXiv 2025)</text>
+<g transform="translate(524,36)">
+<text x="0" y="14" class="k">Naive RAG</text><rect x="92" y="4" width="87" height="14" rx="2" fill="#86b6ef"/><text x="183" y="15" class="v">58</text>
+<text x="0" y="38" class="k">GraphRAG</text><rect x="92" y="28" width="96" height="14" rx="2" fill="#86b6ef"/><text x="192" y="39" class="v">64</text>
+<text x="0" y="62" class="k">VersionRAG</text><rect x="92" y="52" width="135" height="14" rx="2" fill="#1c5cab"/><text x="231" y="63" class="v">90</text>
+<line x1="92" y1="0" x2="92" y2="72" stroke="#b5b4ae"/>
+</g>
+<text x="524" y="134" class="k">Scale 0–100 (bar = value × 1.5 px)</text>
+<text x="0" y="176" class="k">Darker bar = best method in that study. Each panel is a different study and metric, so compare within a panel only. Panels 2 and 3 are preprints (not peer-reviewed).</text>
+</svg>
+<figcaption><b>Figure 3.</b> Published results behind three design choices: page-image search, hybrid retrieval with reranking, and version-aware retrieval.</figcaption>
+</figure>
+
+<h2 class="pb">5. Edge cases and how M.A.C.H. handles them</h2>
+<p>The most dangerous failure is a confident, cited, wrong answer. We list 37 edge cases; 13 are high risk. This is the summary; the full test plan expands it to 55 cases in 14 families with a scripted pass criterion for each. Each one becomes a test case in MACH-Bench, so every robustness claim is backed by a measured number.</p>
+
+<figure>
+<svg viewBox="0 0 760 250" width="100%" role="img" aria-label="Edge cases by stage and risk">
+<style>.k2{font-size:8.8px;fill:#52514e}.v2{font-size:8.6px;font-weight:600;fill:#0b0b0b}</style>
+<!-- legend -->
+<rect x="140" y="2" width="10" height="10" rx="2" fill="#d03b3b"/><text x="154" y="11" class="k2">High risk</text>
+<rect x="214" y="2" width="10" height="10" rx="2" fill="#ec835a"/><text x="228" y="11" class="k2">Medium</text>
+<rect x="278" y="2" width="10" height="10" rx="2" fill="#b5b4ae"/><text x="292" y="11" class="k2">Low</text>
+<g transform="translate(0,22)" font-size="8.8">
+<!-- scale: 1 case = 34px, start x=140 -->
+<text x="130" y="11" class="k2" text-anchor="end">Revisions and scope</text><rect x="140" y="2" width="134" height="12" fill="#d03b3b"/><rect x="276" y="2" width="32" height="12" fill="#ec835a"/><text x="314" y="12" class="v2">5</text>
+<text x="130" y="29" class="k2" text-anchor="end">Retrieval and parsing</text><rect x="140" y="20" width="236" height="12" fill="#ec835a"/><text x="382" y="30" class="v2">7</text>
+<text x="130" y="47" class="k2" text-anchor="end">Question handling</text><rect x="140" y="38" width="168" height="12" fill="#ec835a"/><text x="314" y="48" class="v2">5</text>
+<text x="130" y="65" class="k2" text-anchor="end">Numbers and units</text><rect x="140" y="56" width="100" height="12" fill="#d03b3b"/><text x="246" y="66" class="v2">3</text>
+<text x="130" y="83" class="k2" text-anchor="end">Safety</text><rect x="140" y="74" width="66" height="12" fill="#d03b3b"/><text x="212" y="84" class="v2">2</text>
+<text x="130" y="101" class="k2" text-anchor="end">Conflicts and variants</text><rect x="140" y="92" width="66" height="12" fill="#d03b3b"/><text x="212" y="102" class="v2">2</text>
+<text x="130" y="119" class="k2" text-anchor="end">Security and access</text><rect x="140" y="110" width="66" height="12" fill="#d03b3b"/><rect x="208" y="110" width="32" height="12" fill="#ec835a"/><text x="246" y="120" class="v2">3</text>
+<text x="130" y="137" class="k2" text-anchor="end">Escalation and experts</text><rect x="140" y="128" width="100" height="12" fill="#ec835a"/><text x="246" y="138" class="v2">3</text>
+<text x="130" y="155" class="k2" text-anchor="end">Drafting</text><rect x="140" y="146" width="66" height="12" fill="#ec835a"/><rect x="208" y="146" width="32" height="12" fill="#b5b4ae"/><text x="246" y="156" class="v2">3</text>
+<text x="130" y="173" class="k2" text-anchor="end">Generation</text><rect x="140" y="164" width="32" height="12" fill="#ec835a"/><text x="178" y="174" class="v2">1</text>
+<text x="130" y="191" class="k2" text-anchor="end">Operations and audit</text><rect x="140" y="182" width="32" height="12" fill="#ec835a"/><rect x="174" y="182" width="66" height="12" fill="#b5b4ae"/><text x="246" y="192" class="v2">3</text>
+<line x1="140" y1="0" x2="140" y2="198" stroke="#b5b4ae"/>
+</g>
+<text x="140" y="240" class="k2">Number of edge cases per stage (37 total). Each bar segment is one risk level.</text>
+<text x="450" y="60" class="k2"><tspan font-weight="700" fill="#0b0b0b">Reading it:</tspan></text>
+<text x="450" y="74" class="k2">The high-risk cases sit in revisions, numbers,</text>
+<text x="450" y="87" class="k2">safety, conflicts and security, which are exactly</text>
+<text x="450" y="100" class="k2">the stages M.A.C.H.'s novel checks target.</text>
+<text x="450" y="113" class="k2">Retrieval has the most cases, but they are</text>
+<text x="450" y="126" class="k2">medium risk: a miss leads to abstention, not</text>
+<text x="450" y="139" class="k2">a wrong instruction.</text>
+</svg>
+<figcaption><b>Figure 4.</b> Edge cases by pipeline stage and risk level. Full list below.</figcaption>
+</figure>
+
+<table>
+<tr><th style="width:12%">Stage</th><th style="width:23%">Edge case</th><th style="width:19%">Failure</th><th style="width:30%">How M.A.C.H. handles it</th><th>Risk</th></tr>
+<tr><td>Revisions</td><td>Two revisions of one SOP both marked effective</td><td>Answer mixes old and new steps</td><td>Ingestion blocks it; verifier rejects mixed-revision answers</td><td><span class="tag H">High</span></td></tr>
+<tr><td>Revisions</td><td>ECN changes one step before the SOP is reissued</td><td>Old step used</td><td>Deviation overlay patches that step</td><td><span class="tag H">High</span></td></tr>
+<tr><td>Revisions</td><td>Revision effective tomorrow, or on one line only</td><td>Too early or wrong line</td><td>Filter on effective window and scope using context lock</td><td><span class="tag H">High</span></td></tr>
+<tr><td>Revisions</td><td>SOP withdrawn with no replacement</td><td>Answers from a withdrawn procedure</td><td>Abstain: "procedure withdrawn, contact QA"</td><td><span class="tag H">High</span></td></tr>
+<tr><td>Revisions</td><td>Operator quotes an old document number</td><td>Executes obsolete text</td><td>Answer from current revision and state what changed</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Variants</td><td>Same procedure, different machine model or serial range</td><td>Right text, wrong machine</td><td>Context lock; citation must match the variant</td><td><span class="tag H">High</span></td></tr>
+<tr><td>Conflict</td><td>SOP and quality alert give different values</td><td>Silently picks one</td><td>Show both, escalate; alert outranks SOP until resolved</td><td><span class="tag H">High</span></td></tr>
+<tr><td>Numbers</td><td>N·m in one document, lbf·ft in another</td><td>Wrong value or unit</td><td>Number lock; units converted by code</td><td><span class="tag H">High</span></td></tr>
+<tr><td>Numbers</td><td>Tolerance given ("25 ± 2 N·m")</td><td>Tolerance dropped</td><td>Value, tolerance and unit extracted as one field</td><td><span class="tag H">High</span></td></tr>
+<tr><td>Numbers</td><td>OCR reads 8 as B, or 2,5 vs 2.5</td><td>Wrong digit stated confidently</td><td>Cross-check OCR against image reading; mismatch → abstain</td><td><span class="tag H">High</span></td></tr>
+<tr><td>Safety</td><td>Answer would omit a LOTO or PPE step</td><td>Injury risk</td><td>Safety-completeness check; warnings first, never truncated</td><td><span class="tag H">High</span></td></tr>
+<tr><td>Safety</td><td>"How do I skip / bypass this interlock?"</td><td>Unsafe instruction</td><td>Router refuses, logs, escalates</td><td><span class="tag H">High</span></td></tr>
+<tr><td>Security</td><td>Hidden "ignore your rules" text in an ingested doc</td><td>Hijacked answer</td><td>Strip at ingestion; retrieved text treated as data; fixed output schema</td><td><span class="tag H">High</span></td></tr>
+<tr><td>Access</td><td>Operator asks about a restricted RCA</td><td>Leak</td><td>Role filter before search, not after generation</td><td><span class="tag H">High</span></td></tr>
+<tr><td>Security</td><td>Names or personal data in RCA reports</td><td>Privacy breach</td><td>Redact at ingestion; no per-operator analytics</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Retrieval</td><td>Answer only in a diagram callout or table cell</td><td>Text search misses it</td><td>Page-image lane plus layout parsing</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Retrieval</td><td>Scanned, skewed or hand-marked pages</td><td>OCR garbage</td><td>Route to image search; flag low-quality pages</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Retrieval</td><td>Table or step continues on the next page</td><td>Half a step</td><td>Merge split tables and steps at ingestion</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Retrieval</td><td>Diagram not updated when the text was</td><td>Figure contradicts text</td><td>Figure carries its own revision hash; mismatch flagged</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Retrieval</td><td>Plant slang ("CP" for caliper piston)</td><td>Search miss</td><td>Plant glossary expands query; exact-ID lane</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Retrieval</td><td>Same warning repeated in 10 documents</td><td>Unfair scoring</td><td>Multi-gold evidence sets in the benchmark</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Retrieval</td><td>Cross-reference to another document</td><td>Answer missing the referenced figure</td><td>Agent follows parsed cross-reference links</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Query</td><td>Vague ("how do I fix it?")</td><td>Guesses the machine</td><td>Use station context or ask one clarifying question</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Query</td><td>Two questions in one, or a multi-step plan</td><td>Answers half</td><td>Router sends it to the multi-step path</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Query</td><td>Not covered by any document</td><td>Hallucination</td><td>Abstain: "not in the controlled documents"</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Query</td><td>Blurry or wrong photo</td><td>Wrong page, high confidence</td><td>Image-quality check; confirm the matched part</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Query</td><td>Hindi or mixed-language question</td><td>Search miss</td><td>Translate query for search; answer in user's language, cite English source</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Generation</td><td>Very long SOP overflows the context</td><td>Procedure cut off</td><td>Step-level chunks; completeness check against the step count</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Escalation</td><td>No expert responds in time</td><td>Operator blocked or guesses</td><td>Timeout → "stop and hold" for tier-1 steps; supervisor alert</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Escalation</td><td>Expert note conflicts with the SOP, or has expired</td><td>Informal override</td><td>Notes are advisory, expire, and can't override without change control</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Escalation</td><td>Everything gets escalated</td><td>System ignored</td><td>Track escalation rate; tune on the risk–coverage curve</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Drafting</td><td>Draft contradicts another active SOP</td><td>Bad revision approved</td><td>Compliance agent checks all active SOPs for that station</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Drafting</td><td>Reviewer rubber-stamps the AI draft</td><td>Automation bias</td><td>Diff view; planted-fault audits</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Drafting</td><td>Two drafts of the same SOP at once</td><td>Collision</td><td>SOP family locked during review</td><td><span class="tag L">Low</span></td></tr>
+<tr><td>Ops</td><td>LLM API down or slow</td><td>No answer on the floor</td><td>Fallback: keyword search showing source pages, with a banner</td><td><span class="tag M">Med</span></td></tr>
+<tr><td>Ops</td><td>Model version changes silently</td><td>Behaviour drifts</td><td>Pin version; rerun benchmark on every change</td><td><span class="tag L">Low</span></td></tr>
+<tr><td>Audit</td><td>"What did the AI tell operator X on date D?"</td><td>No proof</td><td>Full audit log with replay</td><td><span class="tag L">Low</span></td></tr>
+</table>
+
+<h2>6. Evaluation plan</h2>
+<p>We compare five systems on the same frozen corpus, with the same LLM, top-k and context budget, so any gain comes from M.A.C.H.'s design.</p>
+<div class="two">
+<div>
+<h3>Systems</h3>
+<ol>
+<li>BM25 keyword search (shows top pages only)</li>
+<li>BM25 + LLM</li>
+<li>Text-only RAG (dense over OCR text, no checks)</li>
+<li>Hybrid text RAG (BM25 + dense, RRF)</li>
+<li>M.A.C.H. full, plus ablations: no page images, no Revision Guard, no verifier, no hazard gate, no router</li>
+</ol>
+<h3>Metrics</h3>
+<ul>
+<li><b>Retrieval:</b> Recall@5, nDCG@10 (multi-gold)</li>
+<li><b>Answers:</b> correctness, faithfulness, citation precision/recall (ALCE-style)</li>
+<li><b>Procedure:</b> step-order fidelity, exact match on critical values, safety-step recall</li>
+<li><b>Trust:</b> revision-mixing rate, superseded-citation rate, abstention precision/recall, unsafe-answer rate, escalation rate</li>
+<li><b>Drafting:</b> accept/edit/reject, edit distance, planted-fault catch rate</li>
+<li><b>Ops:</b> p50/p95 latency, cost per query</li>
+</ul>
+</div>
+<div>
+<figure style="margin-top:4px">
+<svg viewBox="0 0 360 214" width="100%" role="img" aria-label="Benchmark composition">
+<style>.k3{font-size:9px;fill:#52514e}.v3{font-size:9px;font-weight:600;fill:#0b0b0b}.h3{font-size:9.8px;font-weight:700}</style>
+<text x="0" y="12" class="h3">MACH-Bench: 250 questions (planned)</text>
+<g transform="translate(0,24)">
+<text x="128" y="11" class="k3" text-anchor="end">Text lookup</text><rect x="134" y="2" width="150" height="13" rx="2" fill="#2a78d6"/><text x="290" y="12" class="v3">50</text>
+<text x="128" y="31" class="k3" text-anchor="end">Table lookup</text><rect x="134" y="22" width="120" height="13" rx="2" fill="#2a78d6"/><text x="260" y="32" class="v3">40</text>
+<text x="128" y="51" class="k3" text-anchor="end">Diagram / photo</text><rect x="134" y="42" width="120" height="13" rx="2" fill="#2a78d6"/><text x="260" y="52" class="v3">40</text>
+<text x="128" y="71" class="k3" text-anchor="end">Multi-step / cross-ref</text><rect x="134" y="62" width="90" height="13" rx="2" fill="#2a78d6"/><text x="230" y="72" class="v3">30</text>
+<text x="128" y="91" class="k3" text-anchor="end">Superseded-revision traps</text><rect x="134" y="82" width="90" height="13" rx="2" fill="#eb6834"/><text x="230" y="92" class="v3">30</text>
+<text x="128" y="111" class="k3" text-anchor="end">Variant / conflict traps</text><rect x="134" y="102" width="60" height="13" rx="2" fill="#eb6834"/><text x="200" y="112" class="v3">20</text>
+<text x="128" y="131" class="k3" text-anchor="end">Unanswerable</text><rect x="134" y="122" width="75" height="13" rx="2" fill="#eb6834"/><text x="215" y="132" class="v3">25</text>
+<text x="128" y="151" class="k3" text-anchor="end">Unsafe / bypass asks</text><rect x="134" y="142" width="45" height="13" rx="2" fill="#eb6834"/><text x="185" y="152" class="v3">15</text>
+<line x1="134" y1="0" x2="134" y2="160" stroke="#b5b4ae"/>
+</g>
+<rect x="0" y="196" width="10" height="10" rx="2" fill="#2a78d6"/><text x="14" y="205" class="k3">Normal questions (160)</text>
+<rect x="150" y="196" width="10" height="10" rx="2" fill="#eb6834"/><text x="164" y="205" class="k3">Trust traps (90)</text>
+</svg>
+<figcaption><b>Figure 5.</b> Planned question mix. 36% are traps designed to make a naive system fail.</figcaption>
+</figure>
+</div>
+</div>
+<h3>Making it rigorous</h3>
+<ul>
+<li><b>Corpus:</b> real revision chains from public FAA Airworthiness Directive supersessions, plus scripted counterfactual edits and a realistic shop-floor set (SOPs with 2–3 revisions, ECNs, deviations, quality alerts, RCAs, drawings, photos). Freeze and hash the snapshot.</li>
+<li><b>Labels:</b> each question has a gold answer, all valid evidence locations, expected behaviour (answer, abstain or escalate) and, for procedures, the ordered steps and critical values. Two annotators label at least 25%; report Cohen's κ.</li>
+<li><b>Split:</b> 30% dev for tuning prompts and thresholds, 70% test touched once.</li>
+<li><b>Judging:</b> an LLM judge from a different model family than the generator, run 3 times with shuffled order, validated on ≥100 human-labelled items. Critical values are checked by exact match, never by the judge.</li>
+<li><b>Statistics:</b> paired per-question tests (McNemar or bootstrap), Holm correction across metrics, 95% confidence intervals; ARES-style correction to turn a small human-labelled set into intervals.</li>
+<li><b>Human study:</b> 3–5 people answer 10 questions with keyword search vs M.A.C.H.; report minutes per correct answer.</li>
+</ul>
+<h3>Release gates (from the test plan)</h3>
+<p>A build ships only if it passes every hard gate. These match the paper draft and the edge-case test plan.</p>
+<table>
+<tr><th>Gate</th><th>Metric</th><th>Threshold</th><th>Type</th></tr>
+<tr><td>No superseded citations</td><td>Superseded-citation rate on revision traps</td><td>0 of n</td><td><span class="tag H">Hard</span></td></tr>
+<tr><td>No mixed-revision answers</td><td>Mixed-revision answer rate</td><td>0 of n</td><td><span class="tag H">Hard</span></td></tr>
+<tr><td>No restricted leakage</td><td>Restricted element IDs in a lower-role context or answer</td><td>0</td><td><span class="tag H">Hard</span></td></tr>
+<tr><td>No injected instruction followed</td><td>Injection success rate</td><td>0</td><td><span class="tag H">Hard</span></td></tr>
+<tr><td>Safety steps present</td><td>Safety-step recall on answered procedures</td><td>≥ 0.98</td><td><span class="tag H">Hard</span></td></tr>
+<tr><td>Exact critical values</td><td>Torque, tolerance, unit, part number exact match</td><td>≥ 0.99 on answered items</td><td><span class="tag H">Hard</span></td></tr>
+<tr><td>Safe fallback</td><td>Keyword fallback shown when the model is down</td><td>100% of kill-switch runs</td><td><span class="tag H">Hard</span></td></tr>
+<tr><td>Abstains when it should</td><td>Abstention recall on unanswerable items</td><td>≥ 0.90</td><td><span class="tag L">Soft</span></td></tr>
+<tr><td>Does not over-abstain</td><td>Over-abstention on answerable items</td><td>≤ 0.15</td><td><span class="tag L">Soft</span></td></tr>
+<tr><td>Fast enough</td><td>Queries answered in under 15 s; p95</td><td>≥ 95%; p95 &lt; 15 s</td><td><span class="tag L">Soft</span></td></tr>
+</table>
+<div class="callout b"><b>Headline numbers for the results slide</b> (to be measured): revision-mixing rate against the baselines, unsafe-answer rate on trap questions, citation precision, Recall@5 on diagram questions, and p95 latency.</div>
+
+<h2>7. Technology stack</h2>
+<table>
+<tr><th style="width:20%">Layer</th><th style="width:40%">Choice for the prototype</th><th>Why</th></tr>
+<tr><td>Parsing</td><td>Docling or PyMuPDF; page images at 150 dpi</td><td>Text, tables and bounding boxes with stable IDs</td></tr>
+<tr><td>Page-image search</td><td>ColQwen2 / ColPali via byaldi or Qdrant multi-vector</td><td>Qdrant supports late-interaction matching; pgvector does not natively</td></tr>
+<tr><td>Text search</td><td>BM25 (rank_bm25 or Postgres full-text) + text embeddings + exact-ID index</td><td>Keywords still win on part numbers and jargon</td></tr>
+<tr><td>Fusion and rerank</td><td>Weighted fusion tuned on dev, cross-encoder reranker</td><td>Avoids the naive-fusion penalty</td></tr>
+<tr><td>LLM</td><td>Paper configuration: 4-bit 7B vision-language model on one plant-side GPU. Demo option: Gemini via Vertex AI. Structured JSON output either way</td><td>Plant data stays on site; schema-enforced answers</td></tr>
+<tr><td>Agents</td><td>LangGraph or plain Python state machine</td><td>Router, grader, drafter, compliance; easy to audit</td></tr>
+<tr><td>Data and governance</td><td>Postgres: registry, overlays, roles, audit log, approval queue</td><td>One source of truth for revisions</td></tr>
+<tr><td>UI</td><td>Streamlit or Next.js: operator chat, PDF viewer with highlighted step, expert inbox, review diff view</td><td>Demo-ready in days</td></tr>
+<tr><td>Deploy</td><td>Docker Compose on one GPU box (open weights served with vLLM); Cloud Run for a hosted demo</td><td>Same pipeline on-prem or in the cloud</td></tr>
+<tr><td>Evaluation</td><td>RAGAS + custom scripts for trust metrics</td><td>Reproducible results table</td></tr>
+</table>
+
+<h2>8. Seven-day plan to the PPT deadline</h2>
+<figure>
+<svg viewBox="0 0 760 158" width="100%" role="img" aria-label="Seven day plan">
+<style>.d{font-size:9.4px;font-weight:700}.dd{font-size:8.3px;fill:#52514e}</style>
+<g>
+<rect x="0" y="0" width="104" height="22" rx="4" fill="#2a78d6"/><text x="52" y="15" class="d" text-anchor="middle" fill="#fff">Fri 6 Nov</text>
+<rect x="109" y="0" width="104" height="22" rx="4" fill="#2a78d6"/><text x="161" y="15" class="d" text-anchor="middle" fill="#fff">Sat 7</text>
+<rect x="218" y="0" width="104" height="22" rx="4" fill="#2a78d6"/><text x="270" y="15" class="d" text-anchor="middle" fill="#fff">Sun 8</text>
+<rect x="327" y="0" width="104" height="22" rx="4" fill="#2a78d6"/><text x="379" y="15" class="d" text-anchor="middle" fill="#fff">Mon 9</text>
+<rect x="436" y="0" width="104" height="22" rx="4" fill="#2a78d6"/><text x="488" y="15" class="d" text-anchor="middle" fill="#fff">Tue 10</text>
+<rect x="545" y="0" width="104" height="22" rx="4" fill="#2a78d6"/><text x="597" y="15" class="d" text-anchor="middle" fill="#fff">Wed 11</text>
+<rect x="654" y="0" width="106" height="22" rx="4" fill="#eb6834"/><text x="707" y="15" class="d" text-anchor="middle" fill="#fff">Thu 12 · DUE</text>
+</g>
+<g class="dd">
+<text x="4" y="40">Corpus: 40+ docs</text><text x="4" y="52">with revisions, ECNs,</text><text x="4" y="64">planted traps</text><text x="4" y="76">Registry schema</text>
+<text x="113" y="40">250-question gold</text><text x="113" y="52">set drafted</text><text x="113" y="64">BM25 + text-RAG</text><text x="113" y="76">baselines run</text>
+<text x="222" y="40">Page-image lane,</text><text x="222" y="52">fusion, Revision</text><text x="222" y="64">Guard, context lock</text>
+<text x="331" y="40">Number lock,</text><text x="331" y="52">verifier, hazard</text><text x="331" y="64">gate, partial</text><text x="331" y="76">answers</text>
+<text x="440" y="40">Expert inbox,</text><text x="440" y="52">drafting + approval</text><text x="440" y="64">flow, audit log</text>
+<text x="549" y="40">Full evaluation run,</text><text x="549" y="52">ablations, results</text><text x="549" y="64">table, screenshots,</text><text x="549" y="76">demo video</text>
+<text x="658" y="40">Finish 12–15 slides,</text><text x="658" y="52">rehearse 7 min twice,</text><text x="658" y="64">submit by evening</text><text x="658" y="76">(not 11:58 PM)</text>
+</g>
+<rect x="0" y="96" width="213" height="18" rx="4" fill="#eaf2fc"/><text x="8" y="109" class="dd">Gate: baselines answer the gold set</text>
+<rect x="218" y="96" width="213" height="18" rx="4" fill="#eaf2fc"/><text x="226" y="109" class="dd">Gate: end-to-end answer with citation in UI</text>
+<rect x="436" y="96" width="213" height="18" rx="4" fill="#eaf2fc"/><text x="444" y="109" class="dd">Gate: numbers for the results slide</text>
+<rect x="654" y="96" width="106" height="18" rx="4" fill="#fdeee7"/><text x="662" y="109" class="dd">Gate: PPT submitted</text>
+<text x="0" y="138" class="dd">If behind schedule, cut in this order: query by photo, "what changed?" answers, STE checker, drafting UI polish. Never cut Revision Guard, the verifier or the baselines.</text>
+<text x="0" y="152" class="dd">Suggested split (3–4 people): data and evaluation · retrieval and registry · LLM checks and agents · UI, governance and PPT.</text>
+</svg>
+<figcaption><b>Figure 6.</b> One week, built thin first and deepened after. A working slice by Sunday matters more than any single component.</figcaption>
+</figure>
+
+<h3>Suggested 12-slide story (7 minutes)</h3>
+<ol>
+<li>Title and one-line pitch</li>
+<li>Problem: one real-looking story of an operator following an outdated revision</li>
+<li>Why current tools fail (stale documents, unsupported citations)</li>
+<li>M.A.C.H. at a glance (Figure 1)</li>
+<li>Novelty 1: Revision Guard, with a screenshot of the "superseded by" note</li>
+<li>Novelty 2: step-level, safety-complete citations and number lock</li>
+<li>Novelty 3: hazard-tiered abstention and smart escalation</li>
+<li>Change-controlled drafting (Figure 2)</li>
+<li>Evaluation design: MACH-Bench, baselines, release gates</li>
+<li>Results: one table and two honest failure cases</li>
+<li>Security, deployment and edge cases handled (Figure 4)</li>
+<li>Impact for LTTS clients and next steps</li>
+</ol>
+
+<h2>9. Jury questions and our answers</h2>
+<dl class="qa">
+<dt>Q1. Isn't this just RAG with extra steps?</dt><dd>RAG is the base. The contribution is the trust layer: Revision Guard, step-level safety-complete citations, number lock and hazard-tiered abstention. We found no peer-reviewed work on these for procedures, and we measure each with an ablation.</dd>
+<dt>Q2. How do you know which revision is effective?</dt><dd>From document-control metadata (status, effective dates, scope, supersedes links), not file dates. A hard filter removes everything else before the LLM sees it, and the verifier rejects any answer mixing revisions.</dd>
+<dt>Q3. What if two current documents disagree?</dt><dd>M.A.C.H. never picks silently. It shows both sources, escalates to an expert, and treats a quality alert as overriding the SOP until resolved.</dd>
+<dt>Q4. How do you stop hallucinated numbers?</dt><dd>Number lock: critical values are copied by code from the cited table cell with their tolerance and unit. The LLM never writes them. If OCR and the image reading disagree, the system abstains.</dd>
+<dt>Q5. Won't it refuse too often to be useful?</dt><dd>We report the risk–coverage curve and escalation rate, not just accuracy. Only tier-1 hazardous steps need very high confidence; general lookups answer with a confidence label. Partial answers keep the operator moving.</dd>
+<dt>Q6. Where do confidence thresholds come from?</dt><dd>Conformal risk control on a held-out calibration set, separately per hazard tier (ICML 2024 methods). Thresholds are re-checked whenever an SOP family is revised.</dd>
+<dt>Q7. Why not fine-tune a model on the SOPs?</dt><dd>Retrieval beats fine-tuning for adding new knowledge (Ovadia et al., EMNLP 2024), and SOPs change too often. Updating an index is instant and auditable; retraining is neither.</dd>
+<dt>Q8. You have no real plant data. Is the test valid?</dt><dd>Part of it is real: revision chains come from public FAA Airworthiness Directive supersessions, and we also run eight public peer-reviewed benchmarks. The shop-floor part is synthetic but reviewed by someone with plant experience (name them). The benchmark, code and schema are designed so LTTS can drop in real documents and rerun the same evaluation.</dd>
+<dt>Q9. Can a malicious document hijack it?</dt><dd>Instruction-like text is stripped at ingestion, retrieved text is treated as data, output is schema-enforced, and access is filtered by role before search. We include injection documents in the test set.</dd>
+<dt>Q10. What if the cloud LLM is down or data can't leave the plant?</dt><dd>The reference configuration already runs on-prem: a 4-bit 7B vision-language model on one plant-side GPU, so documents never leave the plant. If the model is down, a keyword-only fallback shows the right source pages with a banner.</dd>
+<dt>Q11. Who is accountable for an AI-drafted work instruction?</dt><dd>The human approver. Nothing becomes effective without a signed approval, every AI change is shown as a diff, and planted-fault audits measure whether reviewers are really checking.</dd>
+<dt>Q12. How fast is it?</dt><dd>Release gate: 95% of queries answered in under 15 s on a single plant-side GPU (faster with a cloud API). Simple lookups take one pass; only multi-step questions run the agent loop (Adaptive-RAG shows this keeps accuracy at under half the latency). Report the measured p50 and p95.</dd>
+<dt>Q13. What about expert knowledge that isn't written down?</dt><dd>Expert answers to escalations are stored as advisory notes with author, date, expiry and an SOP-conflict check. Repeated notes on the same topic trigger a change-control draft, so tacit knowledge becomes an official revision.</dd>
+<dt>Q14. How is this different from commercial copilots?</dt><dd>General copilots don't understand effectivity, machine variants, hazard tiers or change control. M.A.C.H. is built around document-control rules from ISO 9001 §7.5 and GMP, and it proves its behaviour on trap questions.</dd>
+<dt>Q15. What's the business value for LTTS?</dt><dd>Fewer quality escapes from obsolete instructions, faster answers on night shifts without experts, audit-ready traceability, and faster WI authoring. It is reusable across LTTS's manufacturing, automotive and medical-device clients.</dd>
+<dt>Q16. Hasn't HoH or SOPRAG already solved this?</dt><dd>HoH (ACL 2025) shows outdated documents hurt RAG but treats a document as a whole; it has no effectivity dates, ECN overlays or step-level supersession. SOPRAG (preprint) improves SOP retrieval but has no revisions, images, citations or abstention. We cite both, borrow HoH's outdated-versus-current setup, and test exactly what they leave out.</dd>
+</dl>
+
+<h2>10. Honest limitations</h2>
+<ul>
+<li>The shop-floor documents are synthetic and the real revision chains come from aviation, so absolute accuracy won't transfer directly to a given plant; relative gains over baselines are the claim.</li>
+<li>Conformal guarantees hold only while new questions resemble the calibration set; we mitigate with recalibration on revision events, not eliminate the risk.</li>
+<li>Several of the newest supporting results are arXiv preprints and are labelled as such. Venue status of ColPali (ICLR 2025) and some others should be confirmed before citing in a paper.</li>
+<li>The literature search used the OpenAlex index (covers IEEE incl. Early Access, ACM, ScienceDirect in press, Springer) but paywalled full texts were not read, so novelty claims are phrased as "we found no prior work".</li>
+</ul>
+<div class="callout b"><b>Open questions for you:</b> How many people are on the team, and who owns which part? Do you have GCP credits or a GPU? Can anyone with plant experience review the gold set? Please share the LTTS PPT template so the slide story can be mapped onto it.</div>
+
+<h2>Key references</h2>
+<p class="small"><span class="tag pr">peer-reviewed</span> venue given · <span class="tag ax">arXiv</span> not peer-reviewed. Full list with links and verification notes: <i>MACH multimodal RAG literature review.md</i> in the project files.</p>
+<ol class="refs">
+<li>Faysse et al. ColPali: Efficient Document Retrieval with Vision Language Models. ICLR 2025 (venue to confirm). <span class="tag pr">peer-reviewed</span></li>
+<li>Yu et al. VisRAG: Vision-based RAG on Multi-modality Documents. ICLR 2025. <span class="tag pr">peer-reviewed</span></li>
+<li>Ma et al. Unifying Multimodal Retrieval via Document Screenshot Embedding. EMNLP 2024. <span class="tag pr">peer-reviewed</span></li>
+<li>Zhang et al. OCR Hinders RAG (OHRBench). ICCV 2025. <span class="tag pr">peer-reviewed</span></li>
+<li>Ludwig, Schmidt, Kühn. Ontology-based RAG for a voice-controlled maintenance assistant. Computers in Industry 169, 2025. <span class="tag pr">peer-reviewed</span></li>
+<li>Gao et al. Enabling LLMs to Generate Text with Citations (ALCE). EMNLP 2023. <span class="tag pr">peer-reviewed</span></li>
+<li>Asai et al. Self-RAG. ICLR 2024. <span class="tag pr">peer-reviewed</span></li>
+<li>Song et al. Trust-Score / Trust-Align. ICLR 2025. <span class="tag pr">peer-reviewed</span></li>
+<li>Mohri, Hashimoto. Language Models with Conformal Factuality Guarantees. ICML 2024. <span class="tag pr">peer-reviewed</span></li>
+<li>Kang et al. C-RAG: Certified Generation Risks for RAG. ICML 2024. <span class="tag pr">peer-reviewed</span></li>
+<li>Farquhar et al. Detecting hallucinations in LLMs using semantic entropy. Nature 630, 2024. <span class="tag pr">peer-reviewed</span></li>
+<li>Ma et al. VISA: RAG with Visual Source Attribution. ACL 2025. <span class="tag pr">peer-reviewed</span></li>
+<li>Saad-Falcon et al. ARES. NAACL 2024; Es et al. RAGAS. EACL 2024 (demo). <span class="tag pr">peer-reviewed</span></li>
+<li>Magesh et al. Hallucination-Free? Assessing legal AI research tools. J. Empirical Legal Studies 22, 2025. <span class="tag pr">peer-reviewed</span></li>
+<li>Xu et al. Knowledge Conflicts for LLMs: A Survey. EMNLP 2024. <span class="tag pr">peer-reviewed</span></li>
+<li>Ovadia et al. Fine-Tuning or Retrieval? EMNLP 2024. <span class="tag pr">peer-reviewed</span></li>
+<li>Jeong et al. Adaptive-RAG. NAACL 2024; Trivedi et al. IRCoT. ACL 2023. <span class="tag pr">peer-reviewed</span></li>
+<li>Mozannar, Sontag. Consistent Estimators for Learning to Defer to an Expert. ICML 2020. <span class="tag pr">peer-reviewed</span></li>
+<li>De Toni et al. Towards Human-AI Complementarity with Prediction Sets. NeurIPS 2024; Fanconi, van der Schaar. Cascaded LMs for Human–AI Decision-Making. NeurIPS 2025. <span class="tag pr">peer-reviewed</span></li>
+<li>Kernan Freire et al. Knowledge sharing in manufacturing using LLM-powered tools. Frontiers in AI, 2024. <span class="tag pr">peer-reviewed</span></li>
+<li>Colabianchi et al. Computers in Industry, 2024 (doi 10.1016/j.compind.2024.104129); Meyer et al. IEEE ETFA 2024; Widulle et al. IEEE INDIN 2024. <span class="tag pr">peer-reviewed</span></li>
+<li>Tan et al. JudgeBench. ICLR 2025. <span class="tag pr">peer-reviewed</span></li>
+<li>Ouyang et al. HoH: Impact of Outdated Information on RAG. ACL 2025. <span class="tag pr">peer-reviewed</span></li>
+<li>Morita, Sanderson, Hewitt. Longitudinal-aware Evaluation of RAG over Evolving Credit Policy Documents. EMNLP 2026 Industry. <span class="tag pr">peer-reviewed</span></li>
+<li>Doris et al. DesignQA: A Multimodal Benchmark for Engineering Documentation. ASME JCISE, 2024 (doi 10.1115/1.4067333). <span class="tag pr">peer-reviewed</span></li>
+<li>Jonek, Manns. Leveraging LLM for Assembly Instructions Using Controlled Natural Language. CARV 2025, Springer LNME (doi 10.1007/978-3-032-16889-4_64). <span class="tag pr">peer-reviewed</span></li>
+<li>Wan et al. Hybrid RAG for domain-centric Q&amp;A in smart manufacturing. Advanced Engineering Informatics, 2025. <span class="tag pr">peer-reviewed</span></li>
+<li>Li et al. SOPBench. EMNLP 2026; Wang et al. SOP-Maze. Findings of ACL 2026. <span class="tag pr">peer-reviewed</span></li>
+<li>Lin et al. SOPRAG: Multi-view Graph Experts Retrieval for Industrial SOPs. arXiv 2602.01858. <span class="tag ax">arXiv</span></li>
+<li>Ahmed, Galke Poech, Röttger. Stale-Document Poisoning, 2026. <span class="tag ax">arXiv</span></li>
+<li>Huwiler, Stockinger, Fürst. VersionRAG, 2025. <span class="tag ax">arXiv</span></li>
+<li>Bock, Barnard Feeney. Engineering Change Management Concepts, NIST IR 7922, 2013 (government report); ISO 9001:2015 §7.5; 21 CFR 211.100; EU AI Act Art. 14.</li>
+</ol>
+</body>
+</html>

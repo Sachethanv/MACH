@@ -1,0 +1,6 @@
+# Hazard tiers -> target max error on answered steps (design choice; calibrate thresholds with conformal risk control on dev)
+tiers:
+  1: {name: critical, examples: [LOTO, pressure release, lifting, safety-fastener torque], alpha: 0.01, below_threshold: abstain_stop_and_hold_escalate}
+  2: {name: quality, examples: [torque specs, temperatures, inspection criteria], alpha: 0.05, below_threshold: partial_answer_escalate}
+  3: {name: general, examples: [tool locations, part descriptions, cosmetic steps], alpha: 0.10, below_threshold: answer_low_confidence}
+recalibrate_on_revision: true

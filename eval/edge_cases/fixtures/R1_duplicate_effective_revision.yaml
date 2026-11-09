@@ -1,0 +1,22 @@
+# Example fixture format (see docs/06_evaluation_and_test_plan.md)
+id: R1
+family: revisions
+risk: high
+query: "What is the torque for the caliper bolts at station 3?"
+paraphrases: []
+context:
+  role: operator
+  site: PLANT-1
+  line: L3
+  station: ST3
+  model: MODEL-A
+  serial: 1105
+  query_time: "2026-11-09T10:00:00+05:30"
+corpus_overlay:
+  - plant_duplicate_effective_revision: {doc_id: WI-214, revs: [B, C]}
+expected_behaviour: abstain   # answer | abstain | clarify | refuse | escalate
+gold_element_ids: []
+gold_critical_values: []
+pass_criteria:
+  - ingestion_rejects_duplicate_effective_revision
+  - mixed_revision_answers == 0

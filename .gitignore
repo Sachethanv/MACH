@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.python-version
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+htmlcov/
+.coverage
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+gcp-*.json
+service-account*.json
+
+# Data, indexes, models (large / licensed)
+data/raw/*
+data/processed/*
+data/indexes/*
+!data/**/.gitkeep
+qdrant_storage/
+pgdata/
+models/
+checkpoints/
+*.safetensors
+*.bin
+*.gguf
+*.pt
+*.onnx
+hf_cache/
+.cache/
+
+# Outputs
+outputs/
+runs/
+logs/
+*.log
+eval/results/
+
+# Node (if UI moves to Next.js)
+node_modules/
+.next/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+.antigravity/
+.claude/settings.local.json
+~$*
